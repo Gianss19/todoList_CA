@@ -1,0 +1,15 @@
+C:\Users\gian\Desktop\CA todoList\todoList.Application\bin\Debug\net10.0\todoList.Application.deps.json
+C:\Users\gian\Desktop\CA todoList\todoList.Application\bin\Debug\net10.0\todoList.Application.dll
+C:\Users\gian\Desktop\CA todoList\todoList.Application\bin\Debug\net10.0\todoList.Application.pdb
+C:\Users\gian\Desktop\CA todoList\todoList.Application\bin\Debug\net10.0\todoList.Domain.dll
+C:\Users\gian\Desktop\CA todoList\todoList.Application\bin\Debug\net10.0\todoList.Domain.pdb
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.csproj.AssemblyReference.cache
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.AssemblyInfoInputs.cache
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.AssemblyInfo.cs
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.csproj.CoreCompileInputs.cache
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.B8A9B1CB.Up2Date
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.dll
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\refint\todoList.Application.dll
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.pdb
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\ref\todoList.Application.dll
