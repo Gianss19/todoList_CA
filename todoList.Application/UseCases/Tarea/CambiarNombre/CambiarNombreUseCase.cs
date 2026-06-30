@@ -1,4 +1,5 @@
-namespace todoList.Application.UseCases;
+
+namespace todoList.Application.UseCases.Tarea;
 using todoList.Application.DTO;
 using todoList.Domain;
 
@@ -12,7 +13,7 @@ public class CambiarNombreUseCase
         _repository = repository;
     }    
 
-    public async Task<ResponseDto> CambiarNombreAsync(Guid id, CambiarNombreRequestDto request)
+    public async Task<CambiarNombreTareaResponseDto> CambiarNombreAsync(Guid id, CambiarNombreTareaRequestDto request)
     {
         var tarea = await _repository.GetByIdAsync(id);
         
@@ -22,6 +23,6 @@ public class CambiarNombreUseCase
 
         await _repository.UpdateAsync(tarea);
 
-        return new ResponseDto(tarea.Id, tarea.Nombre, tarea.IsCompleted);    
+        return new CambiarNombreTareaResponseDto(tarea.Id, tarea.Nombre, DateTime.Now);    
     }
 }

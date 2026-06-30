@@ -1,4 +1,5 @@
-namespace todoList.Application.UseCases;
+
+namespace todoList.Application.UseCases.Tarea;
 using todoList.Application.DTO;
 using todoList.Domain;
 public class CompletarTareaUseCase
@@ -9,7 +10,7 @@ public CompletarTareaUseCase(ITareasRepository repository)
 {
     _repository = repository;   
 }
-    public async Task<ResponseDto> CompletarTareaAsync(Guid id)
+    public async Task<GeneralTareaResponseDto> CompletarTareaAsync(Guid id)
     {
         var tarea = await _repository.GetByIdAsync(id);
         
@@ -18,6 +19,6 @@ public CompletarTareaUseCase(ITareasRepository repository)
         tarea.Completar();
         
         await _repository.UpdateAsync(tarea);
-        return new ResponseDto(tarea.Id, tarea.Nombre, tarea.IsCompleted);
+        return new GeneralTareaResponseDto(tarea.Id, tarea.Nombre, tarea.IsCompleted, DateTime.Now);
     }
 }

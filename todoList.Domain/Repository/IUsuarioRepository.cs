@@ -1,4 +1,4 @@
-namespace todoList.Domain.Repository;
+namespace todoList.Domain;
 
 public interface IUsuarioRepository
 {
@@ -7,6 +7,7 @@ public interface IUsuarioRepository
     Task UpdateAsync(Usuario usuario);
 
     Task<Usuario?> GetByIdAsync(Guid id);
+    Task<bool> ExistsAsync(Guid id);
     Task<Usuario?> GetByEmailAsync(string correo);
     Task<IReadOnlyList<Usuario>> GetAllAsync();
     Task DeleteAsync(Guid id);

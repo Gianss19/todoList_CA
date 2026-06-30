@@ -1,4 +1,5 @@
-namespace todoList.Application.UseCases;
+
+namespace todoList.Application.UseCases.Tarea;
 
 using todoList.Application.DTO;
 
@@ -12,10 +13,10 @@ public class ObtenerTodasTareasUseCase
         _repository = repository;   
     }
 
-    public async Task<IReadOnlyList<ResponseDto>> ObtenerTodasAsync()
+    public async Task<IReadOnlyList<GeneralTareaResponseDto>> ObtenerTodasAsync()
     {
         var tareas = await _repository.GetAllAsync();
         
-        return tareas.Select(t => new ResponseDto(t.Id, t.Nombre, t.IsCompleted)).ToList();
+        return tareas.Select(t => new GeneralTareaResponseDto(t.Id, t.Nombre, t.IsCompleted, t.FechaCreacion)).ToList();
     }
 }
