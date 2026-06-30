@@ -1,0 +1,62 @@
+[
+  {
+    "Id": "ea3875c3-ce86-40e2-ad25-b07a2266661a",
+    "Nombre": "cambi\u00E9 de nombre.",
+    "IsCompleted": true
+  },
+  {
+    "Id": "c98f5b7c-c61a-4288-9845-d2db1d66d8f5",
+    "Nombre": "Estudiar ASP.NET",
+    "IsCompleted": false
+  },
+  {
+    "Id": "ddb543d5-8ecb-48c7-bcda-60d94c085288",
+    "Nombre": "Tarea 2",
+    "IsCompleted": false
+  },
+  {
+    "Id": "1604b31a-7bdb-419e-be68-e48cf74432fa",
+    "Nombre": "Aprender Clean Architecture",
+    "IsCompleted": false
+  },
+  {
+    "Id": "82802b7a-cde1-471a-8704-fa57cb1b6775",
+    "Nombre": "Implementar pruebas unitarias",
+    "IsCompleted": false
+  },
+  {
+    "Id": "6a02f5ed-5c46-44bc-b5c2-057880142672",
+    "Nombre": "Crear frontend con React",
+    "IsCompleted": false
+  },
+  {
+    "Id": "eaf5a898-9bd1-4fca-afc2-5070532e5deb",
+    "Nombre": "Configurar repositorio GitHub",
+    "IsCompleted": false
+  },
+  {
+    "Id": "b67fff1b-6dd9-4686-8c17-a16a4f13b7c9",
+    "Nombre": "Leer documentaci\u00F3n de C#",
+    "IsCompleted": false
+  },
+  {
+    "Id": "d8ee3287-6dec-4452-97dd-6537ed290b6d",
+    "Nombre": "Practicar patrones de dise\u00F1o",
+    "IsCompleted": false
+  },
+  {
+    "Id": "36336b3a-18e3-4d7c-a559-eb5fd27337f8",
+    "Nombre": "Dise\u00F1ar base de datos PostgreSQL",
+    "IsCompleted": false
+  },
+  {
+    "Id": "64c7cfdc-9beb-4937-9990-a4a94527fdcd",
+    "Nombre": "Estudiar Entity Framework Core",
+    "IsCompleted": false
+  },
+  {
+    "Id": "4f9eb5f2-37b5-4b39-84aa-c1a965a37f7c",
+    "Nombre": "Preparar entrevista backend",
+    "IsCompleted": false
+  }
+]

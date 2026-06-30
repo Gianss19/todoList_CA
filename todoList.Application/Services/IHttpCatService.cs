@@ -1,4 +1,4 @@
-namespace todoList.Application;
+namespace todoList.Application.Services;
 
 public interface IHttpCatService
 {

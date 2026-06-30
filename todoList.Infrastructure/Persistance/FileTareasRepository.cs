@@ -35,16 +35,16 @@ public class FileTareasRepository : ITareasRepository
         await _lock.WaitAsync();
         try
         {
-            var tareas = await LeerTareasAsync();
+            var listTareas = await LeerTareasAsync();
 
-            var index = tareas.FindIndex(t => t.Id == tarea.Id);
+            var indexTarea = listTareas.FindIndex(t => t.Id == tarea.Id);
 
-            if (index == -1)
+            if (indexTarea == -1)
                 throw new KeyNotFoundException("No se encontró la tarea.");
 
-            tareas[index] = tarea;
+            listTareas[indexTarea] = tarea;
 
-            await GuardarTareasAsync(tareas);
+            await GuardarTareasAsync(listTareas);
         }
         finally
         {
@@ -79,7 +79,22 @@ public class FileTareasRepository : ITareasRepository
             _lock.Release();
         }
     }
+    public async Task<bool> ExistsByNameAsync(string nombre)
+    {
+                await _lock.WaitAsync();
+                nombre = nombre.ToLower();
+        try
+        {
+            var tareas = await LeerTareasAsync();
+            
+            return tareas.Exists(n=> n.Nombre.ToLower() == nombre) ? true : false;
 
+        }
+        finally
+        {
+            _lock.Release();
+        }
+    }
     public async Task DeleteAsync(Guid id)
     {
         await _lock.WaitAsync();

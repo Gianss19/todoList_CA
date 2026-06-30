@@ -4,10 +4,10 @@ using todoList.Application.DTO;
 
 using todoList.Domain;
 
-public class ObtenerTodasTareas
+public class ObtenerTodasTareasUseCase
 {
     private readonly ITareasRepository _repository;
-    public ObtenerTodasTareas(ITareasRepository repository)
+    public ObtenerTodasTareasUseCase(ITareasRepository repository)
     {
         _repository = repository;   
     }

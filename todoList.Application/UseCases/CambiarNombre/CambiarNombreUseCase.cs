@@ -12,13 +12,13 @@ public class CambiarNombreUseCase
         _repository = repository;
     }    
 
-    public async Task<ResponseDto> CambiarNombrAsync(Guid id, string nuevoNombre)
+    public async Task<ResponseDto> CambiarNombreAsync(Guid id, CambiarNombreRequestDto request)
     {
         var tarea = await _repository.GetByIdAsync(id);
         
         if(tarea == null) throw new KeyNotFoundException("no se econtró el id.");
 
-        tarea.CambiarNombre(nuevoNombre);
+        tarea.CambiarNombre(request.nuevoNombre);
 
         await _repository.UpdateAsync(tarea);
 

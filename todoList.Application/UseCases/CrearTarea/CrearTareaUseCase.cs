@@ -12,10 +12,15 @@ public class CrearTareaUseCase
     }
 
 
-    public async Task<ResponseDto> CrearTareaAsync(string Nombre)
+    public async Task<ResponseDto> CrearTareaAsync(CrearTareaRequestDto crearTareaRequestDto)
     {
-        Tarea tarea = new(Nombre);
+        if (await _repository.ExistsByNameAsync(crearTareaRequestDto.Nombre))
+            throw new InvalidOperationException("Ya existe una tarea con ese nombre.");
+
+        
+        Tarea tarea = new(crearTareaRequestDto.Nombre);
         await _repository.AddAsync(tarea);
+        
         return new ResponseDto(tarea.Id, tarea.Nombre, tarea.IsCompleted);
     }
 }
