@@ -25,6 +25,7 @@ public class UsuarioConfiguration: IEntityTypeConfiguration<Usuario>
         builder.Property(u=>u.PasswordHash)
                .IsRequired()
                .HasMaxLength(255);
+       
         
         builder.Property(u=>u.Activo)
                .IsRequired();

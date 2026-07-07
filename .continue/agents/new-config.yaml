@@ -1,0 +1,44 @@
+name: Local Coding Setup
+version: 1.0.0
+schema: v1
+
+models:
+  # Autocomplete rápido
+  - name: Qwen2.5-Coder 3B Autocomplete
+    provider: openai
+    model: qwen2.5-coder-3b-instruct
+    apiBase: http://127.0.0.1:1234/v1
+    apiKey: lm-studio
+    roles:
+      - autocomplete
+    defaultCompletionOptions:
+      contextLength: 2048
+      maxTokens: 512
+
+  # Desarrollo diario
+  - name: Qwen2.5-Coder 7B
+    provider: openai
+    model: qwen2.5-coder-7b-instruct
+    apiBase: http://127.0.0.1:1234/v1
+    apiKey: lm-studio
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      contextLength: 8192
+      maxTokens: 4096
+
+  # Razonamiento pesado
+  - name: Qwen 9B Advanced
+    provider: openai
+    model: qwen/qwen3.5-9b
+    apiBase: http://127.0.0.1:1234/v1
+    apiKey: lm-studio
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      contextLength: 8192
+      maxTokens: 4096
