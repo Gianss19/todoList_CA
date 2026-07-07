@@ -15,3 +15,6 @@ C:\Users\gian\Desktop\CA todoList\todoList.Infrastructure\obj\Debug\net10.0\todo
 C:\Users\gian\Desktop\CA todoList\todoList.Infrastructure\obj\Debug\net10.0\refint\todoList.Infrastructure.dll
 C:\Users\gian\Desktop\CA todoList\todoList.Infrastructure\obj\Debug\net10.0\todoList.Infrastructure.pdb
 C:\Users\gian\Desktop\CA todoList\todoList.Infrastructure\obj\Debug\net10.0\ref\todoList.Infrastructure.dll
+C:\Users\gian\Desktop\CA todoList\todoList.Infrastructure\bin\Debug\net10.0\todoList.Infrastructure.runtimeconfig.json
+C:\Users\gian\Desktop\CA todoList\todoList.Infrastructure\obj\Debug\net10.0\todoList.Infrastructure.sourcelink.json
+C:\Users\gian\Desktop\CA todoList\todoList.Infrastructure\obj\Debug\net10.0\todoList.Infrastructure.genruntimeconfig.cache

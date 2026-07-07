@@ -139,4 +139,14 @@ public class FileTareasRepository : ITareasRepository
 
         await File.WriteAllTextAsync(_path, json);
     }
+
+    public Task<IReadOnlyList<Tarea>> GetAllTasksByUserAsync(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ExistsAsync(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 }

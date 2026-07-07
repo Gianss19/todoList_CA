@@ -17,7 +17,7 @@
             "port": 5432,
             "driver": "PostgreSQL",
             "name": "TodoList",
-            "database": "todolist",
+            "database": "TodoList",
             "username": "ADMIN"
         }
     ]

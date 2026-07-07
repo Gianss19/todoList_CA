@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using todoList.Application.DTO;
-using todoList.Application.UseCases;
+using todoList.Application.DTO.Tarea;
+using todoList.Application.UseCases.Tarea;
 using todoList.Application.Services;
 using System.ComponentModel.DataAnnotations;
 
@@ -75,7 +76,7 @@ public class TareasController : ControllerBase
         }
     }
     [HttpPatch("{id:guid}/nombre")]
-    public async Task<ActionResult<ResponseDto>> NameUpdate(Guid id, [FromBody] [Required] CambiarNombreRequestDto cambiarNombreRequestDto)
+    public async Task<ActionResult<ResponseDto>> NameUpdate(Guid id, [FromBody] [Required] CambiarNombreTareaRequestDto cambiarNombreRequestDto)
     {
         try
         {

@@ -1,7 +1,7 @@
 
 namespace todoList.Application.UseCases.Tarea;
 using todoList.Application.DTO;
-
+using todoList.Application.DTO.Tarea;
 using todoList.Domain;
 public class CrearTareaUseCase
 {

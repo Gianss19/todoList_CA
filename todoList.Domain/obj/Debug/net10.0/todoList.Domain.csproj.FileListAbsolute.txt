@@ -9,3 +9,4 @@ C:\Users\gian\Desktop\CA todoList\todoList.Domain\obj\Debug\net10.0\todoList.Dom
 C:\Users\gian\Desktop\CA todoList\todoList.Domain\obj\Debug\net10.0\refint\todoList.Domain.dll
 C:\Users\gian\Desktop\CA todoList\todoList.Domain\obj\Debug\net10.0\todoList.Domain.pdb
 C:\Users\gian\Desktop\CA todoList\todoList.Domain\obj\Debug\net10.0\ref\todoList.Domain.dll
+C:\Users\gian\Desktop\CA todoList\todoList.Domain\obj\Debug\net10.0\todoList.Domain.sourcelink.json

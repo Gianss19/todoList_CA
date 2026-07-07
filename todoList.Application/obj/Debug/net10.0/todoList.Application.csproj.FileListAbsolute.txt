@@ -13,3 +13,4 @@ C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoLis
 C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\refint\todoList.Application.dll
 C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.pdb
 C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\ref\todoList.Application.dll
+C:\Users\gian\Desktop\CA todoList\todoList.Application\obj\Debug\net10.0\todoList.Application.sourcelink.json

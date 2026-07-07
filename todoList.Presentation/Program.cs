@@ -4,7 +4,9 @@ using todoList.Domain;
 using todoList.Application.UseCases;
 using todoList.Application.Services;
 using todoList.Infrastructure;
-
+using todoList.Application.UseCases.Tarea;
+using todoList.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,15 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ITareasRepository, FileTareasRepository>();
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "No se encontró la cadena de conexión.");
+
+builder.Services.AddDbContext<TodoListDbContext>(options =>
+{
+    options.UseNpgsql(connectionString);
+});
 
 builder.Services.AddHttpClient<IHttpCatService, HttpCatService>();
 
