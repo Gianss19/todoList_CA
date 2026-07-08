@@ -7,6 +7,8 @@ using todoList.Infrastructure;
 using todoList.Application.UseCases.Tarea;
 using todoList.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using todoList.Infrastructure.Repository;
+using todoList.Application.UseCases.Usuario;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,12 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ITareasRepository, FileTareasRepository>();
+builder.Services.Configure<FileSettings>(builder.Configuration.GetSection("FileSettings"));   
+
+builder.Services.AddScoped<ITareasRepository, EfTareaRepository>();
+builder.Services.AddScoped<IUsuarioRepository, EfUsuarioRepository>();
+
+
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException(
@@ -27,6 +35,7 @@ builder.Services.AddDbContext<TodoListDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
 });
+// UseCases para Tareas
 
 builder.Services.AddHttpClient<IHttpCatService, HttpCatService>();
 
@@ -38,11 +47,33 @@ builder.Services.AddScoped<CrearTareaUseCase>();
 
 builder.Services.AddScoped<CompletarTareaUseCase>();
 
-builder.Services.AddScoped<CambiarNombreUseCase>();
+builder.Services.AddScoped<CambiarNombreTareaUseCase>();
 
 builder.Services.AddScoped<BorrarTareasUseCase>();
+// UseCases para Tareas adicionales
+builder.Services.AddScoped<ObtenerTodasTareasPorUsuarioUseCase>();
 
-builder.Services.Configure<FileSettings>(builder.Configuration.GetSection("FileSettings"));   
+
+
+// UseCases para Usuarios
+builder.Services.AddScoped<ObtenerTodosUsuariosUseCase>();
+
+builder.Services.AddScoped<ObtenerUsuarioUseCase>();
+
+builder.Services.AddScoped<CrearUsuarioUseCase>();
+
+builder.Services.AddScoped<CambiarNombreUsuarioUseCase>();
+
+builder.Services.AddScoped<CambiarContraseñaUsuarioUseCase>();
+
+builder.Services.AddScoped<DesactivarUsuarioUseCase>();
+
+builder.Services.AddScoped<ActivarUsuarioUseCase>();
+
+builder.Services.AddScoped<BorrarUsuarioUseCase>();
+
+builder.Services.AddScoped<LoginUsuarioUseCase>();
+
 
 
 
@@ -61,3 +92,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

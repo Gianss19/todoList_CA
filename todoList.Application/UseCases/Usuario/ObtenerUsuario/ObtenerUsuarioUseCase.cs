@@ -1,4 +1,4 @@
-namespace todoList.Application.UseCases.Usuario.ObtenerUsuario;
+namespace todoList.Application.UseCases.Usuario;
 
 public class ObtenerUsuarioUseCase
 {

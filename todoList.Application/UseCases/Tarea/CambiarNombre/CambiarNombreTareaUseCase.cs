@@ -5,11 +5,11 @@ using todoList.Application.DTO.Tarea;
 using todoList.Domain;
 
 
-public class CambiarNombreUseCase
+public class CambiarNombreTareaUseCase
 {
     private readonly ITareasRepository _repository;
 
-    public CambiarNombreUseCase(ITareasRepository repository)
+    public CambiarNombreTareaUseCase(ITareasRepository repository)
     {
         _repository = repository;
     }    

@@ -1,6 +1,6 @@
 using todoList.Domain;
 
-namespace todoList.Application.UseCases.Usuario.CrearUsuario;
+namespace todoList.Application.UseCases.Usuario;
 
 public class CrearUsuarioUseCase
 {
