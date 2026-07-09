@@ -9,6 +9,10 @@ using todoList.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using todoList.Infrastructure.Repository;
 using todoList.Application.UseCases.Usuario;
+using todoList.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +28,34 @@ builder.Services.Configure<FileSettings>(builder.Configuration.GetSection("FileS
 
 builder.Services.AddScoped<ITareasRepository, EfTareaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, EfUsuarioRepository>();
+
+builder.Services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
+builder.Services.AddScoped<ITokenService, todoList.Infrastructure.Services.JwtService>();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
+                                                    ?? throw new InvalidOperationException("Jwt:Key no configurada."))),
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        
+
+    };
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Administrador", policy => policy.RequireRole(nameof(Rol.Administrador)));
+});
+
 
 
 var connectionString =
@@ -86,6 +118,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

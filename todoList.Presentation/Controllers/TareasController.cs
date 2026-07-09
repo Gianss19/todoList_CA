@@ -15,7 +15,7 @@ public class TareasController : ControllerBase
     private readonly ObtenerTodasTareasUseCase _obtenerTodasUseCase;
     private readonly ObtenerTareaUseCase _obtenerTareaUseCase;
     private readonly CrearTareaUseCase _crearTareaUseCase;
-    private readonly CambiarNombreUseCase _cambiarNombreUseCase;
+    private readonly CambiarNombreTareaUseCase _cambiarNombreUseCase;
     private readonly BorrarTareasUseCase _borrarTareasUseCase;
     private readonly CompletarTareaUseCase _completarTareaUseCase;
     private readonly IHttpCatService _httpCatService;
@@ -25,7 +25,7 @@ public class TareasController : ControllerBase
         ObtenerTodasTareasUseCase obtenerTodasUseCase,
         ObtenerTareaUseCase obtenerTareaUseCase,
         CrearTareaUseCase crearTareaUseCase,
-        CambiarNombreUseCase cambiarNombreUseCase,
+        CambiarNombreTareaUseCase cambiarNombreUseCase,
         BorrarTareasUseCase borrarTareasUseCase,
         CompletarTareaUseCase completarTareaUseCase,
         IHttpCatService httpCatService)

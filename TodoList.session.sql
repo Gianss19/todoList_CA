@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS usuarios;
+SELECT * FROM usuarios;

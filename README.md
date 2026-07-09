@@ -1,298 +1,326 @@
-# todoList
+# TodoList API
 
-> Proyecto backend desarrollado en **C# / .NET 10** con el objetivo de aprender y aplicar **Clean Architecture**, **principios SOLID**, **Inyección de Dependencias** y el **Patrón Repositorio** mediante un dominio sencillo de gestión de tareas.
+API REST desarrollada con **ASP.NET Core 10** siguiendo los principios de **Clean Architecture** y **SOLID**. El proyecto implementa autenticación mediante **JWT**, persistencia con **Entity Framework Core Code First** y **PostgreSQL**, así como un diseño desacoplado mediante repositorios, casos de uso e inyección de dependencias.
 
----
-
-## Descripción
-
-Este proyecto tiene un dominio funcional simple de manera intencional.
-
-El objetivo no es desarrollar otra aplicación de tareas, sino construir una base arquitectónica sólida que sirva como preparación para proyectos empresariales y sistemas SaaS de mayor complejidad.
-
-Toda la lógica de negocio permanece desacoplada de frameworks, bases de datos y servicios externos siguiendo los principios de **Clean Architecture**.
+> Proyecto desarrollado con fines de aprendizaje para profundizar en arquitectura de software y desarrollo backend con .NET.
 
 ---
 
-## Objetivos
+# Tecnologías
 
-* Aprender Clean Architecture desde cero.
-* Aplicar principios SOLID.
-* Diseñar entidades con lógica de negocio.
-* Implementar Casos de Uso.
-* Comprender la Inyección de Dependencias.
-* Implementar el Patrón Repositorio.
-* Separar la lógica de negocio de la infraestructura.
-* Construir bases sólidas para futuros proyectos backend.
+- .NET 10
+- ASP.NET Core Web API
+- Entity Framework Core 10
+- PostgreSQL
+- JWT (JSON Web Token)
+- BCrypt
+- Dependency Injection
+- Clean Architecture
+- Docker
+- Swagger / OpenAPI
 
 ---
 
-## Arquitectura
+# Arquitectura
 
-```text
-Presentation (ASP.NET Core API)
-        │
-        ▼
-Application (Casos de Uso)
-        │
-        ▼
-Domain (Entidades y Reglas de Negocio)
-        ▲
-        │
-Infrastructure (Persistencia y Servicios Externos)
+El proyecto está dividido en cuatro capas siguiendo Clean Architecture.
+
 ```
-
-### Domain
-
-* Entidad rica (`Tarea`)
-* Reglas de negocio
-* Contrato del repositorio (`ITareasRepository`)
-
-### Application
-
-* Casos de uso
-* DTOs
-* Inversión de dependencias
-* Orquestación de la aplicación
-
-### Infrastructure
-
-* Persistencia mediante archivos JSON
-* Implementación del repositorio
-* Servicios externos
-* Configuración mediante `IOptions`
-
-### Presentation
-
-* API REST con ASP.NET Core
-* Controladores
-* Inyección de Dependencias
-* Swagger / OpenAPI
-
----
-
-## Tecnologías
-
-* .NET 10
-* C#
-* ASP.NET Core
-* Clean Architecture
-* Dependency Injection
-* Repository Pattern
-* System.Text.Json
-
-### Próximamente
-
-* PostgreSQL
-* Entity Framework Core
-* Redis
-* xUnit
-* Docker
-* JWT
-* CI/CD
-
----
-
-## Estado del proyecto
-
-### Completado
-
-* Capa Domain
-* Capa Application
-* Capa Infrastructure (persistencia JSON)
-
-### En desarrollo
-
-* Capa Presentation
-* Controladores
-* Configuración de Inyección de Dependencias
-
-### Planeado
-
-* Pruebas unitarias
-* Pruebas de integración
-* PostgreSQL
-* Entity Framework Core
-* Redis
-* Docker Compose
-* JWT
-* CI/CD
-
----
-
-## Filosofía del proyecto
-
-Este repositorio documenta mi proceso de aprendizaje como desarrollador Backend .NET.
-
-La prioridad del proyecto no es desarrollar funcionalidades rápidamente, sino comprender en profundidad la arquitectura de software, el diseño orientado a objetos y las buenas prácticas utilizadas en aplicaciones empresariales.
-
----
-
-## Estructura del proyecto
-
-```text
-todoList
+TodoList
 │
-├── Domain
+├── todoList.Domain
+│   ├── Entities
+│   ├── Repositories
+│   └── Enums
 │
-├── Application
-│   ├── DTO
+├── todoList.Application
+│   ├── DTOs
 │   ├── Interfaces
+│   ├── Services
 │   └── UseCases
 │
-├── Infrastructure
+├── todoList.Infrastructure
+│   ├── Persistence
+│   ├── Configurations
+│   ├── Repositories
+│   └── Services
 │
-└── Presentation
+└── todoList.Presentation
+    ├── Controllers
+    ├── Program.cs
+    └── appsettings.json
 ```
 
 ---
 
-## Licencia
+# Principios aplicados
 
-Este proyecto se distribuye bajo la licencia MIT.
-# todoList
+## SOLID
 
-> Backend project developed in **C# / .NET 10** to learn and apply **Clean Architecture**, **SOLID principles**, **Dependency Injection**, and **Repository Pattern** through a simple task management domain.
+- Single Responsibility Principle
+- Open/Closed Principle
+- Liskov Substitution Principle
+- Interface Segregation Principle
+- Dependency Inversion Principle
 
----
+## Patrones utilizados
 
-## Overview
-
-This project is intentionally simple from a business perspective.
-
-Its purpose is **not** to build the next Todo application, but to establish a solid architectural foundation before developing larger enterprise systems.
-
-The project follows **Clean Architecture**, where business rules remain independent of frameworks, databases, and external services.
-
----
-
-## Objectives
-
-* Learn Clean Architecture from scratch.
-* Apply SOLID principles.
-* Design rich domain entities.
-* Implement Use Cases (Application Layer).
-* Understand Dependency Injection.
-* Implement the Repository Pattern.
-* Separate business logic from infrastructure.
-* Practice software architecture before building larger SaaS projects.
+- Repository Pattern
+- Dependency Injection
+- Use Case Pattern
+- DTO Pattern
 
 ---
 
-## Current Architecture
+# Funcionalidades
 
-```text
-Presentation (ASP.NET Core API)
-        │
-        ▼
-Application (Use Cases)
-        │
-        ▼
-Domain (Entities & Business Rules)
-        ▲
-        │
-Infrastructure (Persistence & External Services)
+## Usuarios
+
+- Registro de usuarios
+- Inicio de sesión
+- Hash de contraseñas mediante BCrypt
+- Activación y desactivación de usuarios
+- Cambio de nombre
+- Cambio de contraseña
+
+## Tareas
+
+- Crear tareas
+- Obtener todas las tareas
+- Obtener una tarea por Id
+- Cambiar nombre
+- Completar tarea
+- Eliminar tarea
+
+## Seguridad
+
+- JWT Authentication
+- Claims
+- Roles
+- Policies
+- Endpoints protegidos mediante `[Authorize]`
+
+---
+
+# Modelo de datos
+
+## Usuario
+
+| Campo | Tipo |
+|--------|------|
+| Id | Guid |
+| Nombre | string |
+| Correo | string |
+| PasswordHash | string |
+| Rol | Enum |
+| Activo | bool |
+| FechaCreacion | DateTime |
+| FechaActualizacion | DateTime? |
+
+---
+
+## Tarea
+
+| Campo | Tipo |
+|--------|------|
+| Id | Guid |
+| Nombre | string |
+| IsCompleted | bool |
+| UsuarioId | Guid |
+| FechaCreacion | DateTime |
+| FechaActualizacion | DateTime? |
+
+Relación:
+
 ```
-
-### Domain
-
-* Rich entity (`Tarea`)
-* Business rules
-* Repository abstraction (`ITareasRepository`)
-
-### Application
-
-* Use Cases
-* DTOs
-* Dependency inversion
-* Application orchestration
-
-### Infrastructure
-
-* JSON file persistence
-* Repository implementation
-* External services
-* Configuration through `IOptions`
-
-### Presentation
-
-* ASP.NET Core Web API
-* Controllers
-* Dependency Injection
-* Swagger/OpenAPI
-
----
-
-## Technologies
-
-* .NET 10
-* C#
-* ASP.NET Core
-* Clean Architecture
-* Dependency Injection
-* Repository Pattern
-* System.Text.Json
-* Docker (future)
-* PostgreSQL (planned)
-* Redis (planned)
-* xUnit (planned)
-
----
-
-## Current Status
-
-### Completed
-
-* Domain Layer
-* Application Layer
-* Infrastructure Layer (JSON persistence)
-
-### In Progress
-
-* Presentation Layer
-* Controllers
-* Dependency Injection configuration
-
-### Planned
-
-* Unit Tests
-* Integration Tests
-* PostgreSQL
-* Entity Framework Core
-* Redis Cache
-* JWT Authentication
-* Docker Compose
-* CI/CD
-
----
-
-## Learning Goals
-
-This repository documents my learning journey toward becoming a Backend .NET Developer.
-
-Rather than focusing on delivering features quickly, the emphasis is on understanding architectural decisions, software design principles, and maintainable code.
-
----
-
-## Project Structure
-
-```text
-todoList
-│
-├── Domain
-│
-├── Application
-│   ├── DTO
-│   ├── Interfaces
-│   └── UseCases
-│
-├── Infrastructure
-│
-└── Presentation
+Usuario
+   │
+   │ 1
+   │
+   └───────────────*
+                  Tarea
 ```
 
 ---
 
-## License
+# Autenticación
 
-This project is released under the MIT License.
+La autenticación se realiza mediante JWT.
+
+Proceso:
+
+```
+Usuario
+
+↓
+
+Login
+
+↓
+
+Validación de contraseña (BCrypt)
+
+↓
+
+Generación del JWT
+
+↓
+
+Cliente almacena el token
+
+↓
+
+Authorization: Bearer <token>
+
+↓
+
+Endpoints protegidos
+```
+
+---
+
+# Entity Framework Core
+
+El proyecto utiliza **Code First**.
+
+Características implementadas:
+
+- DbContext
+- Fluent API
+- IEntityTypeConfiguration
+- Relaciones 1:N
+- Migraciones
+- PostgreSQL
+
+---
+
+# Variables de configuración
+
+El proyecto utiliza **User Secrets** para evitar exponer información sensible en GitHub.
+
+Ejemplo:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": ""
+  },
+
+  "Jwt": {
+    "Key": "",
+    "Issuer": "",
+    "Audience": ""
+  }
+}
+```
+
+---
+
+# Ejecutar el proyecto
+
+## 1 Clonar
+
+```bash
+git clone https://github.com/Gianss19/todoList_CA.git
+```
+
+---
+
+## 2 Restaurar paquetes
+
+```bash
+dotnet restore
+```
+
+---
+
+## 3 Configurar User Secrets
+
+```bash
+dotnet user-secrets init
+```
+
+Agregar:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=TodoList;Username=postgres;Password=tu_password"
+  },
+
+  "Jwt": {
+    "Key": "tu_secret_key",
+    "Issuer": "TodoList.Api",
+    "Audience": "TodoList.Client"
+  }
+}
+```
+
+---
+
+## 4 Crear la base de datos
+
+```bash
+dotnet ef database update
+```
+
+---
+
+## 5 Ejecutar
+
+```bash
+dotnet run --project todoList.Presentation
+```
+
+Swagger estará disponible en:
+
+```
+https://localhost:xxxx/swagger
+```
+
+---
+
+# Aprendizajes
+
+Durante el desarrollo del proyecto se practicaron conceptos como:
+
+- Clean Architecture
+- SOLID
+- Entity Framework Core Code First
+- Fluent API
+- Relaciones entre entidades
+- PostgreSQL
+- JWT
+- Claims
+- Roles
+- Policies
+- BCrypt
+- Dependency Injection
+- Repository Pattern
+- Casos de uso
+- DTOs
+- User Secrets
+- Migraciones
+
+---
+
+# Próximas mejoras
+
+- Refresh Tokens
+- Paginación
+- Filtros y búsqueda
+- Logging estructurado
+- Unit Testing
+- Integration Testing
+- Docker Compose
+- CI/CD con GitHub Actions
+- Rate Limiting
+- Validación con FluentValidation
+- Result Pattern
+- CQRS + MediatR
+
+---
+
+# Licencia
+
+Proyecto desarrollado únicamente con fines educativos y de práctica.

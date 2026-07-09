@@ -33,6 +33,9 @@ public class UsuarioConfiguration: IEntityTypeConfiguration<Usuario>
                .IsRequired();
         
         builder.Property(u=>u.FechaActualizacion);
+        builder.Property(u=> u.rol)
+               .HasConversion<string>()
+               .IsRequired();
 
 
 
