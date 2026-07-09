@@ -13,6 +13,7 @@ using todoList.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using todoList.Application.UseCases.Login;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ builder.Services.AddScoped<ITareasRepository, EfTareaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, EfUsuarioRepository>();
 
 builder.Services.AddSingleton<IPasswordHasher, BCryptPasswordHasher>();
-builder.Services.AddScoped<ITokenService, todoList.Infrastructure.Services.JwtService>();
+builder.Services.AddScoped<ITokenService, JwtService>();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -90,8 +91,6 @@ builder.Services.AddScoped<ObtenerTodasTareasPorUsuarioUseCase>();
 // UseCases para Usuarios
 builder.Services.AddScoped<ObtenerTodosUsuariosUseCase>();
 
-builder.Services.AddScoped<ObtenerUsuarioUseCase>();
-
 builder.Services.AddScoped<CrearUsuarioUseCase>();
 
 builder.Services.AddScoped<CambiarNombreUsuarioUseCase>();
@@ -104,7 +103,8 @@ builder.Services.AddScoped<ActivarUsuarioUseCase>();
 
 builder.Services.AddScoped<BorrarUsuarioUseCase>();
 
-builder.Services.AddScoped<LoginUsuarioUseCase>();
+//UseCases para login
+builder.Services.AddScoped<LoginUseCase>();
 
 
 

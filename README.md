@@ -272,12 +272,6 @@ dotnet ef database update
 dotnet run --project todoList.Presentation
 ```
 
-Swagger estará disponible en:
-
-```
-https://localhost:xxxx/swagger
-```
-
 ---
 
 # Aprendizajes
