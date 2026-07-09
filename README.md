@@ -207,7 +207,7 @@ Ejemplo:
   },
 
   "Jwt": {
-    "Key": "",
+    "SecretKey": "",
     "Issuer": "",
     "Audience": ""
   }
@@ -249,7 +249,7 @@ Agregar:
   },
 
   "Jwt": {
-    "Key": "tu_secret_key",
+    "SecretKey": "tu_secret_key",
     "Issuer": "TodoList.Api",
     "Audience": "TodoList.Client"
   }

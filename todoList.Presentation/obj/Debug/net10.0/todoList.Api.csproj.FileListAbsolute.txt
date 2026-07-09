@@ -134,3 +134,6 @@ C:\Users\gian\Desktop\CA todoList\todoList.Presentation\bin\Debug\net10.0\Micros
 C:\Users\gian\Desktop\CA todoList\todoList.Presentation\bin\Debug\net10.0\Microsoft.IdentityModel.Logging.dll
 C:\Users\gian\Desktop\CA todoList\todoList.Presentation\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\gian\Desktop\CA todoList\todoList.Presentation\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
+c:\Users\gian\Desktop\CA todoList\todoList.Presentation\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+c:\Users\gian\Desktop\CA todoList\todoList.Presentation\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.dll
+c:\Users\gian\Desktop\CA todoList\todoList.Presentation\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

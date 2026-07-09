@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,7 +19,7 @@ public class JwtService : ITokenService
     }
     public string GenerateToken(Guid id, string nombre, string correo, string rol)
     {
-        rol = rol.ToLower();
+        
         var secretKey = _configuration["Jwt:SecretKey"] ?? throw new InvalidOperationException("El SecretKey no está configurado."); // Se buscan los parametros para firmar token
         var issuer = _configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("El Issuer no está configurado.");
         var audience = _configuration["Jwt:Audience"] ?? throw new InvalidOperationException("El Audience no está configurado.");
