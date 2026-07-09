@@ -3,7 +3,7 @@ namespace todoList.Domain;
 public interface IUsuarioRepository
 {
     Task AddAsync(Usuario usuario); 
-
+    
     Task UpdateAsync(Usuario usuario);
 
     Task<Usuario?> GetByIdAsync(Guid id);

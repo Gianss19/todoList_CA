@@ -1,5 +1,6 @@
 using System.Security;
 using todoList.Application.DTO.Usuario;
+using todoList.Application.Services;
 using todoList.Domain;
 
 namespace todoList.Application.UseCases.Usuario;
@@ -7,9 +8,11 @@ namespace todoList.Application.UseCases.Usuario;
 public class CambiarContraseñaUsuarioUseCase
 {
     private readonly IUsuarioRepository _repository;
-    public CambiarContraseñaUsuarioUseCase(IUsuarioRepository repository)
+    private readonly IPasswordHasher _passwordHasher;
+    public CambiarContraseñaUsuarioUseCase(IUsuarioRepository repository, IPasswordHasher passwordHasher)
     {
         _repository = repository;
+        _passwordHasher = passwordHasher;
     }
 
 
@@ -17,10 +20,11 @@ public class CambiarContraseñaUsuarioUseCase
     {
         if(!await _repository.ExistsAsync(request.id))
             throw new KeyNotFoundException("El usuario no existe.");
+        var usuario = await _repository.GetByIdAsync(request.id);  //mejorar: implementar verificacion de email antes de cambiar password.
 
-        var usuario = await _repository.GetByIdAsync(request.id);
+        var nuevoHash = _passwordHasher.Hash(request.NuevaPassword);
         
-        usuario.CambiarContraseña(request.nuevoHash);
+        usuario.CambiarContraseña(nuevoHash);
         
         await _repository.UpdateAsync(usuario);
     }

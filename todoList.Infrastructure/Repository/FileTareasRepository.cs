@@ -1,8 +1,10 @@
-namespace todoList.Infrastructure;
+
 using todoList.Domain;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 
+
+namespace todoList.Infrastructure.Repository;
 public class FileTareasRepository : ITareasRepository
 {
     private readonly string _path;
@@ -138,5 +140,15 @@ public class FileTareasRepository : ITareasRepository
             });
 
         await File.WriteAllTextAsync(_path, json);
+    }
+
+    public Task<IReadOnlyList<Tarea>> GetAllTasksByUserAsync(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ExistsAsync(Guid id)
+    {
+        throw new NotImplementedException();
     }
 }

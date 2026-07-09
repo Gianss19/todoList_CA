@@ -2,7 +2,11 @@
 using System.Text.RegularExpressions;
 
 namespace todoList.Domain;
-
+public enum Rol
+{
+    Usuario = 0,
+    Administrador = 1
+}
 public class Usuario
 {
  public Guid Id {get; private set;}
@@ -13,7 +17,13 @@ public class Usuario
  public DateTime FechaCreacion {get; private set;}
  public DateTime? FechaActualizacion{get; private set;}
  public ICollection<Tarea> Tareas{get; private set;}
+ public Rol rol {get; private set;} 
 
+
+private Usuario()
+    {
+        
+    }
 public Usuario(string nombre, string correo, string passwordHash)
     {
 
@@ -29,13 +39,14 @@ public Usuario(string nombre, string correo, string passwordHash)
 
         if (string.IsNullOrWhiteSpace(passwordHash))
             throw new ArgumentException("El hash no puede estar vacío.", nameof(passwordHash));
-        if(passwordHash.Length < 60)
-            throw new ArgumentException("El hash debe tener al menos 60 caracteres.", nameof(passwordHash));
+        if(passwordHash.Length != 60)
+            throw new ArgumentException("El hash debe tener 60 caracteres.", nameof(passwordHash));
 
         Id = Guid.NewGuid();
         Nombre = nombre;
         Correo = correo;
         PasswordHash = passwordHash;
+        rol = Rol.Usuario; 
         FechaCreacion = DateTime.UtcNow;
         Tareas = new List<Tarea>();
     }

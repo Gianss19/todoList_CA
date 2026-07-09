@@ -14,9 +14,13 @@ public class Tarea
     public DateTime? FechaActualizacion { get; private set; }
     
     public Guid UsuarioId { get; private set; } // FK para el usuario que la creo
+    public Usuario Usuario{ get; private set;} = null!;
 
     
-    
+    private Tarea()
+    {
+        
+    }
     public Tarea(string nombre, Guid usuario_id)
     {
         if (string.IsNullOrWhiteSpace(nombre))
@@ -25,8 +29,7 @@ public class Tarea
             throw new ArgumentException("El nombre debe tener al menos 3 caracteres.", nameof(nombre));
         if(nombre.Length > 100)
             throw new ArgumentException("El nombre no puede tener más de 100 caracteres.", nameof(nombre));
-        if(usuario_id == Id)
-            throw new ArgumentException("El id de la tarea no puede ser el mismo que el de un usuario.", nameof(usuario_id));
+
 
         Id = Guid.NewGuid();
         UsuarioId = usuario_id;

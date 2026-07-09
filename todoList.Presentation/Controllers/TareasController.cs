@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using todoList.Application.DTO;
-using todoList.Application.UseCases;
+using todoList.Application.DTO.Tarea;
+using todoList.Application.UseCases.Tarea;
 using todoList.Application.Services;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,7 +15,7 @@ public class TareasController : ControllerBase
     private readonly ObtenerTodasTareasUseCase _obtenerTodasUseCase;
     private readonly ObtenerTareaUseCase _obtenerTareaUseCase;
     private readonly CrearTareaUseCase _crearTareaUseCase;
-    private readonly CambiarNombreUseCase _cambiarNombreUseCase;
+    private readonly CambiarNombreTareaUseCase _cambiarNombreUseCase;
     private readonly BorrarTareasUseCase _borrarTareasUseCase;
     private readonly CompletarTareaUseCase _completarTareaUseCase;
     private readonly IHttpCatService _httpCatService;
@@ -24,7 +25,7 @@ public class TareasController : ControllerBase
         ObtenerTodasTareasUseCase obtenerTodasUseCase,
         ObtenerTareaUseCase obtenerTareaUseCase,
         CrearTareaUseCase crearTareaUseCase,
-        CambiarNombreUseCase cambiarNombreUseCase,
+        CambiarNombreTareaUseCase cambiarNombreUseCase,
         BorrarTareasUseCase borrarTareasUseCase,
         CompletarTareaUseCase completarTareaUseCase,
         IHttpCatService httpCatService)
@@ -75,7 +76,7 @@ public class TareasController : ControllerBase
         }
     }
     [HttpPatch("{id:guid}/nombre")]
-    public async Task<ActionResult<ResponseDto>> NameUpdate(Guid id, [FromBody] [Required] CambiarNombreRequestDto cambiarNombreRequestDto)
+    public async Task<ActionResult<ResponseDto>> NameUpdate(Guid id, [FromBody] [Required] CambiarNombreTareaRequestDto cambiarNombreRequestDto)
     {
         try
         {

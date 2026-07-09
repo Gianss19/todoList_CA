@@ -1,0 +1,10 @@
+Crear usuario:
+
+{
+  "nombre": "Giancarlo Samperio",
+  "correo": "giancarlo@example.com",
+  "password": "MiPassword123!"
+ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MWUwMjM4OS0zNjhmLTRmMzQtOGVjNy1jMzc3YjcyOTUxMzMiLCJ1bmlxdWVfbmFtZSI6IkdpYW5jYXJsbyBTYW1wZXJpbyIsImVtYWlsIjoiZ2lhbmNhcmxvQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluaXN0cmFkb3IiLCJuYmYiOjE3ODM1NzIxMDIsImV4cCI6MTc4MzU3OTMwMiwiaWF0IjoxNzgzNTcyMTAyLCJpc3MiOiJ0b2RvTGlzdC5BcGkiLCJhdWQiOiJ0b2RvTGlzdC5DbGllbnQifQ.Qk0dbrDXB161Sx9CF_vsWeV9uWsnfeXa0nnb0A2C2b0
+}
+
+http://localhost:5150/api/usuarios/81e02389-368f-4f34-8ec7-c377b7295133/activar

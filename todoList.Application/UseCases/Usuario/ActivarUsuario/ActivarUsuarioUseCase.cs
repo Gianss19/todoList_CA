@@ -15,7 +15,7 @@ public class ActivarUsuarioUseCase
     {
         if(!await _repository.ExistsAsync(id))
             throw new KeyNotFoundException("No existe el usuario.");
-
+        
         var usuario = await _repository.GetByIdAsync(id);
         usuario.Activar();
 

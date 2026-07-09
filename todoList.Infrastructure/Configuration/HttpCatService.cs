@@ -14,9 +14,11 @@ public class HttpCatService : IHttpCatService
         try
         {
             using var request = new HttpRequestMessage(HttpMethod.Head, catUrl);
-            var response = await _httpClient.SendAsync(request);
+           
+           HttpResponseMessage response = await _httpClient.SendAsync(request);
 
             return response.IsSuccessStatusCode ? catUrl: null;
+            
         }
         catch (HttpRequestException)
         {
