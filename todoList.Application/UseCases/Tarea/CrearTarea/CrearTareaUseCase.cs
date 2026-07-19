@@ -5,23 +5,26 @@ using todoList.Application.DTO.Tarea;
 using todoList.Domain;
 public class CrearTareaUseCase
 {
-    private readonly ITareasRepository _repository;
-    public CrearTareaUseCase(ITareasRepository repository)
+    private readonly ITareasRepository _tareasRepository;
+    private readonly IUsuarioRepository _usuarioRepository;
+    public CrearTareaUseCase(ITareasRepository tareasRepository, IUsuarioRepository usuarioRepository)
     {
-        _repository = repository;
+        _tareasRepository = tareasRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
 
     public async Task<CrearTareaResponseDto> CrearTareaAsync(CrearTareaRequestDto crearTareaRequestDto)
     {
-        if (await _repository.ExistsByNameAsync(crearTareaRequestDto.Nombre))
+        if (await _tareasRepository.ExistsByNameAsync(crearTareaRequestDto.Nombre))
             throw new InvalidOperationException("Ya existe una tarea con ese nombre.");
 
-        if(!await _repository.ExistsAsync(crearTareaRequestDto.Usuario_id))
+            
+        if(!await _usuarioRepository.ExistsAsync(crearTareaRequestDto.Usuario_id))
            throw new InvalidOperationException("El usuario no existe.");         
         
         Tarea tarea = new(crearTareaRequestDto.Nombre, crearTareaRequestDto.Usuario_id);
-        await _repository.AddAsync(tarea);
+        await _tareasRepository.AddAsync(tarea);
         
         return new CrearTareaResponseDto(tarea.Id, tarea.Nombre, tarea.IsCompleted, tarea.FechaCreacion);
     }

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TodoList API Client</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e1e4e8; line-height: 1.5; }
+  .container { max-width: 860px; margin: 0 auto; padding: 20px; }
+
+  header { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #21262d; margin-bottom: 24px; }
+  header h1 { font-size: 1.3rem; }
+  #user-info { font-size: 0.85rem; color: #8b949e; }
+  #user-info strong { color: #58a6ff; }
+
+  .api-url { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+  .api-url input { flex: 1; padding: 8px 12px; background: #161b22; border: 1px solid #30363d; border-radius: 6px; color: #e1e4e8; font-size: 0.9rem; }
+
+  .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .card h2 { font-size: 1rem; color: #58a6ff; margin-bottom: 12px; cursor: pointer; user-select: none; }
+  .card h2:hover { color: #79c0ff; }
+  .card h2::before { content: '[+] '; font-weight: normal; color: #8b949e; }
+  .card.open h2::before { content: '[-] '; }
+  .card-body { display: none; }
+  .card.open .card-body { display: block; }
+
+  .row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  input, select { padding: 7px 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #e1e4e8; font-size: 0.85rem; }
+  input { flex: 1; min-width: 120px; }
+
+  button { padding: 7px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; }
+  button:active { transform: scale(0.97); }
+  .btn-primary { background: #238636; color: #fff; }
+  .btn-primary:hover { background: #2ea043; }
+  .btn-danger { background: #da3633; color: #fff; }
+  .btn-danger:hover { background: #f85149; }
+  .btn-secondary { background: #30363d; color: #e1e4e8; }
+  .btn-secondary:hover { background: #3d444d; }
+  .btn-blue { background: #1f6feb; color: #fff; }
+  .btn-blue:hover { background: #388bfd; }
+  .btn-sm { padding: 4px 10px; font-size: 0.8rem; }
+
+  .result { margin-top: 10px; padding: 10px; background: #0d1117; border: 1px solid #21262d; border-radius: 6px; font-family: 'Cascadia Code', 'Fira Code', monospace; font-size: 0.8rem; white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto; }
+  .result:empty { display: none; }
+  .status-ok { color: #3fb950; }
+  .status-err { color: #f85149; }
+  .status-warn { color: #d29922; }
+
+  .inline-form { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .inline-form input { min-width: 80px; flex: 0 1 160px; }
+  label { font-size: 0.8rem; color: #8b949e; }
+  .sep { border: none; border-top: 1px solid #21262d; margin: 12px 0; }
+
+  @media (max-width: 600px) { .container { padding: 10px; } input { min-width: 100%; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>TodoList API</h1>
+    <div id="user-info"><span id="auth-status">No autenticado</span></div>
+  </header>
+
+  <div class="api-url">
+    <label>API:</label>
+    <input id="api-url" value="http://localhost:5150" />
+  </div>
+
+  <!-- LOGIN -->
+  <div class="card open" id="card-login">
+    <h2 onclick="toggle(this)">Login / Registro</h2>
+    <div class="card-body">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Login</h3>
+      <div class="row">
+        <input id="login-email" placeholder="Email" />
+        <input id="login-pass" type="password" placeholder="Password" />
+        <button class="btn-primary" onclick="doLogin()">Entrar</button>
+      </div>
+      <div id="login-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Crear usuario</h3>
+      <div class="row">
+        <input id="reg-nombre" placeholder="Nombre" />
+        <input id="reg-email" placeholder="Email" />
+        <input id="reg-pass" type="password" placeholder="Password" />
+        <button class="btn-blue" onclick="doRegister()">Crear</button>
+      </div>
+      <div id="reg-result" class="result"></div>
+      <hr class="sep">
+      <button class="btn-secondary btn-sm" onclick="doLogout()">Cerrar sesion</button>
+    </div>
+  </div>
+
+  <!-- HEALTH -->
+  <div class="card" id="card-health">
+    <h2 onclick="toggle(this)">Health Check</h2>
+    <div class="card-body">
+      <button class="btn-secondary" onclick="checkHealth()">GET /health</button>
+      <div id="health-result" class="result"></div>
+    </div>
+  </div>
+
+  <!-- TAREAS -->
+  <div class="card" id="card-tareas">
+    <h2 onclick="toggle(this)">Tareas (no auth)</h2>
+    <div class="card-body">
+      <div class="inline-form" style="margin-bottom:8px">
+        <button class="btn-secondary btn-sm" onclick="getTodasTareas()">GET /api/tareas</button>
+      </div>
+      <div id="tareas-list-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Obtener tarea por ID</h3>
+      <div class="inline-form">
+        <input id="tarea-id" placeholder="GUID" />
+        <button class="btn-secondary btn-sm" onclick="getTareaById()">GET</button>
+      </div>
+      <div id="tarea-id-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Crear tarea</h3>
+      <div class="inline-form">
+        <input id="tarea-nombre" placeholder="Nombre" />
+        <input id="tarea-user-id" placeholder="Usuario GUID" />
+        <button class="btn-primary btn-sm" onclick="crearTarea()">POST</button>
+      </div>
+      <div id="tarea-create-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Cambiar nombre</h3>
+      <div class="inline-form">
+        <input id="tarea-update-id" placeholder="Tarea GUID" />
+        <input id="tarea-nuevo-nombre" placeholder="Nuevo nombre" />
+        <button class="btn-blue btn-sm" onclick="cambiarNombreTarea()">PATCH</button>
+      </div>
+      <div id="tarea-name-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Completar tarea</h3>
+      <div class="inline-form">
+        <input id="tarea-completar-id" placeholder="Tarea GUID" />
+        <button class="btn-primary btn-sm" onclick="completarTarea()">POST /completar</button>
+      </div>
+      <div id="tarea-complete-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Borrar tarea</h3>
+      <div class="inline-form">
+        <input id="tarea-delete-id" placeholder="Tarea GUID" />
+        <button class="btn-danger btn-sm" onclick="borrarTarea()">DELETE</button>
+      </div>
+      <div id="tarea-delete-result" class="result"></div>
+    </div>
+  </div>
+
+  <!-- USUARIOS -->
+  <div class="card" id="card-usuarios">
+    <h2 onclick="toggle(this)">Usuarios</h2>
+    <div class="card-body">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Todos los usuarios [Admin]</h3>
+      <div class="inline-form" style="margin-bottom:8px">
+        <button class="btn-secondary btn-sm" onclick="getUsuarios()">GET /api/usuarios/all</button>
+      </div>
+      <div id="usuarios-list-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Activar usuario [Admin]</h3>
+      <div class="inline-form">
+        <input id="user-activar-id" placeholder="Usuario GUID" />
+        <button class="btn-primary btn-sm" onclick="activarUsuario()">PATCH /activar</button>
+      </div>
+      <div id="user-activar-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Desactivar usuario [Admin]</h3>
+      <div class="inline-form">
+        <input id="user-desactivar-id" placeholder="Usuario GUID" />
+        <button class="btn-secondary btn-sm" onclick="desactivarUsuario()">PATCH /desactivar</button>
+      </div>
+      <div id="user-desactivar-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Cambiar nombre [Auth]</h3>
+      <div class="inline-form">
+        <input id="user-nombre-id" placeholder="Usuario GUID" />
+        <input id="user-nuevo-nombre" placeholder="Nuevo nombre" />
+        <button class="btn-blue btn-sm" onclick="cambiarNombreUsuario()">PATCH /cambiar-nombre</button>
+      </div>
+      <div id="user-nombre-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Cambiar contrasena [Auth]</h3>
+      <div class="inline-form">
+        <input id="user-pass-id" placeholder="Usuario GUID" />
+        <input id="user-nueva-pass" type="password" placeholder="Nueva password" />
+        <button class="btn-blue btn-sm" onclick="cambiarPassUsuario()">PATCH /cambiar-contraseña</button>
+      </div>
+      <div id="user-pass-result" class="result"></div>
+      <hr class="sep">
+      <h3 style="font-size:0.85rem;color:#8b949e;margin-bottom:8px">Borrar usuario [Admin]</h3>
+      <div class="inline-form">
+        <input id="user-borrar-id" placeholder="Usuario GUID" />
+        <button class="btn-danger btn-sm" onclick="borrarUsuario()">DELETE /borrar</button>
+      </div>
+      <div id="user-borrar-result" class="result"></div>
+    </div>
+  </div>
+
+  <!-- RAW -->
+  <div class="card" id="card-raw">
+    <h2 onclick="toggle(this)">Request personalizado</h2>
+    <div class="card-body">
+      <div class="row">
+        <select id="raw-method" style="width:90px;flex:0">
+          <option>GET</option><option>POST</option><option>PATCH</option><option>PUT</option><option>DELETE</option>
+        </select>
+        <input id="raw-path" placeholder="/api/tareas" />
+        <button class="btn-primary" onclick="sendRaw()">Enviar</button>
+      </div>
+      <div style="margin-top:8px">
+        <label>Body (JSON):</label>
+        <textarea id="raw-body" rows="4" style="width:100%;background:#0d1117;border:1px solid #30363d;border-radius:6px;color:#e1e4e8;font-family:monospace;font-size:0.8rem;padding:8px;resize:vertical;margin-top:4px"></textarea>
+      </div>
+      <div id="raw-result" class="result"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API = () => document.getElementById('api-url').value.replace(/\/+$/, '');
+let token = localStorage.getItem('jwt') || '';
+
+function toggle(el) { el.parentElement.classList.toggle('open'); }
+
+function authHeaders() { return token ? { 'Authorization': 'Bearer ' + token } : {}; }
+
+function show(elId, text, ok) {
+  const el = document.getElementById(elId);
+  const cls = ok === true ? 'status-ok' : ok === false ? 'status-err' : 'status-warn';
+  el.innerHTML = `<span class="${cls}">${typeof text === 'string' ? text : JSON.stringify(text, null, 2)}</span>`;
+}
+
+async function req(method, path, body, resultId) {
+  const opts = { method, headers: { 'Content-Type': 'application/json', ...authHeaders() } };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res = await fetch(API() + path, opts);
+    const text = await res.text();
+    let data = text;
+    try { data = JSON.parse(text); } catch(e) {}
+    const ok = res.status >= 200 && res.status < 300;
+    const prefix = `<span class="${ok ? 'status-ok' : 'status-err'}">[${res.status} ${res.statusText}]</span>\n`;
+    show(resultId, prefix + (typeof data === 'string' ? data : JSON.stringify(data, null, 2)), ok);
+    return { ok, status: res.status, data };
+  } catch(e) {
+    show(resultId, 'Error de red: ' + e.message, false);
+    return { ok: false, status: 0, data: null };
+  }
+}
+
+// Login
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const pass = document.getElementById('login-pass').value;
+  if (!email || !pass) return show('login-result', 'Completa email y password', null);
+  const r = await req('POST', '/api/login', { Email: email, Password: pass }, 'login-result');
+  if (r.ok) {
+    token = typeof r.data === 'string' ? r.data : r.data?.token || r.data?.Token || '';
+    localStorage.setItem('jwt', token);
+    document.getElementById('auth-status').innerHTML = 'JWT: <strong>' + token.slice(0, 30) + '...</strong>';
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const name = payload.unique_name || payload.name || payload.email || '';
+      const role = payload.role || payload.Role || '';
+      document.getElementById('auth-status').innerHTML = `User: <strong>${name}</strong> | Role: <strong>${role}</strong>`;
+    } catch(e) {}
+  }
+}
+
+function doLogout() {
+  token = '';
+  localStorage.removeItem('jwt');
+  document.getElementById('auth-status').textContent = 'No autenticado';
+  document.getElementById('login-result').textContent = 'Sesion cerrada.';
+}
+
+async function doRegister() {
+  const nombre = document.getElementById('reg-nombre').value;
+  const email = document.getElementById('reg-email').value;
+  const pass = document.getElementById('reg-pass').value;
+  if (!nombre || !email || !pass) return show('reg-result', 'Completa todos los campos', null);
+  await req('POST', '/api/usuarios/crear', { Nombre: nombre, Correo: email, Password: pass }, 'reg-result');
+}
+
+// Health
+function checkHealth() { req('GET', '/health', null, 'health-result'); }
+
+// Tareas
+function getTodasTareas() { req('GET', '/api/tareas', null, 'tareas-list-result'); }
+function getTareaById() { const id = document.getElementById('tarea-id').value; if (!id) return; req('GET', `/api/tareas/${id}`, null, 'tarea-id-result'); }
+function crearTarea() {
+  const nombre = document.getElementById('tarea-nombre').value;
+  const uid = document.getElementById('tarea-user-id').value;
+  if (!nombre) return show('tarea-create-result', 'Nombre requerido', null);
+  req('POST', '/api/tareas', { Nombre: nombre, Usuario_id: uid || '00000000-0000-0000-0000-000000000000' }, 'tarea-create-result');
+}
+function cambiarNombreTarea() {
+  const id = document.getElementById('tarea-update-id').value;
+  const nombre = document.getElementById('tarea-nuevo-nombre').value;
+  if (!id || !nombre) return show('tarea-name-result', 'ID y nombre requeridos', null);
+  req('PATCH', `/api/tareas/${id}/nombre`, { id: id, nuevoNombre: nombre }, 'tarea-name-result');
+}
+function completarTarea() { const id = document.getElementById('tarea-completar-id').value; if (!id) return; req('POST', `/api/tareas/${id}/completar`, null, 'tarea-complete-result'); }
+function borrarTarea() { const id = document.getElementById('tarea-delete-id').value; if (!id) return; req('DELETE', `/api/tareas/${id}`, null, 'tarea-delete-result'); }
+
+// Usuarios
+function getUsuarios() { req('GET', '/api/usuarios/all', null, 'usuarios-list-result'); }
+function activarUsuario() { const id = document.getElementById('user-activar-id').value; if (!id) return; req('PATCH', `/api/usuarios/${id}/activar`, null, 'user-activar-result'); }
+function desactivarUsuario() { const id = document.getElementById('user-desactivar-id').value; if (!id) return; req('PATCH', `/api/usuarios/${id}/desactivar`, null, 'user-desactivar-result'); }
+function cambiarNombreUsuario() {
+  const id = document.getElementById('user-nombre-id').value;
+  const nombre = document.getElementById('user-nuevo-nombre').value;
+  if (!id || !nombre) return show('user-nombre-result', 'ID y nombre requeridos', null);
+  req('PATCH', `/api/usuarios/${id}/cambiar-nombre`, { id: id, nuevoNombre: nombre }, 'user-nombre-result');
+}
+function cambiarPassUsuario() {
+  const id = document.getElementById('user-pass-id').value;
+  const pass = document.getElementById('user-nueva-pass').value;
+  if (!id || !pass) return show('user-pass-result', 'ID y password requeridos', null);
+  req('PATCH', `/api/usuarios/${id}/cambiar-contraseña`, { id: id, NuevaPassword: pass }, 'user-pass-result');
+}
+function borrarUsuario() { const id = document.getElementById('user-borrar-id').value; if (!id) return; req('DELETE', `/api/usuarios/${id}/borrar`, null, 'user-borrar-result'); }
+
+// Raw
+async function sendRaw() {
+  const method = document.getElementById('raw-method').value;
+  const path = document.getElementById('raw-path').value;
+  let body = null;
+  const bodyText = document.getElementById('raw-body').value.trim();
+  if (bodyText) { try { body = JSON.parse(bodyText); } catch(e) { return show('raw-result', 'JSON invalido: ' + e.message, false); } }
+  await req(method, path, body, 'raw-result');
+}
+
+// Init
+if (token) {
+  document.getElementById('auth-status').innerHTML = 'JWT: <strong>' + token.slice(0, 30) + '...</strong>';
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const name = payload.unique_name || payload.name || payload.email || '';
+    const role = payload.role || payload.Role || '';
+    document.getElementById('auth-status').innerHTML = `User: <strong>${name}</strong> | Role: <strong>${role}</strong>`;
+  } catch(e) {}
+}
+</script>
+</body>
+</html>

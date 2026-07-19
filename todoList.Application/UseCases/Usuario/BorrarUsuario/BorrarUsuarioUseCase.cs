@@ -14,9 +14,7 @@ public class BorrarUsuarioUseCase
     {
         if(!await _repository.ExistsAsync(id))
             throw new KeyNotFoundException("El usuario no existe.");
-            
-        var usuario = await _repository.GetByIdAsync(id);
 
-          await _repository.DeleteAsync(id);  
+        await _repository.DeleteAsync(id);
     }
 }
