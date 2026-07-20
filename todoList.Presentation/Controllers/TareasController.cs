@@ -4,6 +4,7 @@ using todoList.Application.DTO.Tarea;
 using todoList.Application.UseCases.Tarea;
 using todoList.Application.Services;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace todoList.Api.Controllers;
 
@@ -39,6 +40,7 @@ public class TareasController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IReadOnlyList<ResponseDto>>> GetAll()
     {
         var tareas = await _obtenerTodasUseCase.ObtenerTodasAsync();
@@ -46,6 +48,7 @@ public class TareasController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult<ResponseDto>> GetById(Guid id)
     {
         try
@@ -61,6 +64,7 @@ public class TareasController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<ResponseDto>> Create([FromBody] [Required] CrearTareaRequestDto crearTareaRequestDto)
     {
         try
@@ -75,6 +79,7 @@ public class TareasController : ControllerBase
         }
     }
     [HttpPatch("{id:guid}/nombre")]
+    [Authorize]
     public async Task<ActionResult<ResponseDto>> NameUpdate(Guid id, [FromBody] [Required] CambiarNombreTareaRequestDto cambiarNombreRequestDto)
     {
         try
@@ -90,6 +95,7 @@ public class TareasController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize]
     public async Task<ActionResult> Delete(Guid id)
     {
         try
@@ -106,6 +112,7 @@ public class TareasController : ControllerBase
 
     }
     [HttpPost("{id:guid}/completar")]
+    [Authorize]
     public async Task<ActionResult<ResponseDto>>CompleteTask(Guid id)
     {
         try
