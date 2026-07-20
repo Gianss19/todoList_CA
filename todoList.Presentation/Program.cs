@@ -124,7 +124,10 @@ app.UseMiddleware<ExceptionsMiddlewareHandler>();
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -133,5 +136,3 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.Run();
-
-public partial class Program { }

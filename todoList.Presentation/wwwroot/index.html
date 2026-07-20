@@ -65,7 +65,7 @@
 
   <div class="api-url">
     <label>API:</label>
-    <input id="api-url" value="http://localhost:5150" />
+    <input id="api-url" />
   </div>
 
   <!-- LOGIN -->
@@ -220,8 +220,16 @@
 
 </div>
 
+<script src="config.js"></script>
 <script>
-const API = () => document.getElementById('api-url').value.replace(/\/+$/, '');
+const API = () => {
+  const input = document.getElementById('api-url').value.trim();
+  if (input) return input.replace(/\/+$/, '');
+  return (window.__API_CONFIG__?.baseUrl || 'http://localhost:5150').replace(/\/+$/, '');
+};
+window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('api-url').value = window.__API_CONFIG__?.baseUrl || 'http://localhost:5150';
+});
 let token = localStorage.getItem('jwt') || '';
 
 function toggle(el) { el.parentElement.classList.toggle('open'); }
