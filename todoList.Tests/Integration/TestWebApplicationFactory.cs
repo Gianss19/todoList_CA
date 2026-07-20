@@ -21,14 +21,19 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Development");
+        builder.UseEnvironment("Testing");
 
         builder.ConfigureServices(services =>
         {
-            var descriptor = services.SingleOrDefault(
+            var dbOptionsDescriptor = services.SingleOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<TodoListDbContext>));
-            if (descriptor != null)
-                services.Remove(descriptor);
+            if (dbOptionsDescriptor != null)
+                services.Remove(dbOptionsDescriptor);
+
+            var dbDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(TodoListDbContext));
+            if (dbDescriptor != null)
+                services.Remove(dbDescriptor);
 
             services.AddDbContext<TodoListDbContext>(options =>
                 options.UseInMemoryDatabase(_dbName));
