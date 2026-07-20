@@ -1,9 +1,0 @@
-<Solution>
-  <Folder Name="/todoList.Presentation/">
-    <Project Path="todoList.Presentation/todoList.Api.csproj" />
-  </Folder>
-  <Project Path="todoList.Application/todoList.Application.csproj" />
-  <Project Path="todoList.Domain/todoList.Domain.csproj" />
-  <Project Path="todoList.Infrastructure/todoList.Infrastructure.csproj" />
-  <Project Path="todoList.Tests/todoList.Tests.csproj" />
-</Solution>
