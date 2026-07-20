@@ -51,20 +51,13 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Administrador", policy => policy.RequireRole(nameof(Rol.Administrador)));
 });
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDbContext<TodoListDbContext>(options =>
-        options.UseInMemoryDatabase("TodoListDev"));
-}
-else
-{
+
     var connectionString =
         builder.Configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("No se encontró la cadena de conexión.");
 
     builder.Services.AddDbContext<TodoListDbContext>(options =>
         options.UseNpgsql(connectionString));
-}
 
 builder.Services.AddHttpClient<IHttpCatService, HttpCatService>();
 
@@ -120,6 +113,7 @@ if (app.Environment.IsDevelopment())
     DevSeedData.Seed(context);
 }
 
+app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseMiddleware<ExceptionsMiddlewareHandler>();
 
 app.UseHttpsRedirection();
