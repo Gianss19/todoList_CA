@@ -225,10 +225,10 @@
 const API = () => {
   const input = document.getElementById('api-url').value.trim();
   if (input) return input.replace(/\/+$/, '');
-  return (window.__API_CONFIG__?.baseUrl || 'http://localhost:5150').replace(/\/+$/, '');
+  return (window.__API_CONFIG__?.baseUrl || window.location.origin).replace(/\/+$/, '');
 };
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('api-url').value = window.__API_CONFIG__?.baseUrl || 'http://localhost:5150';
+  document.getElementById('api-url').value = window.__API_CONFIG__?.baseUrl || window.location.origin;
 });
 let token = localStorage.getItem('jwt') || '';
 
