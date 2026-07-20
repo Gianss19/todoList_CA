@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TodoList API Client</title>
+<title>TodoList</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e1e4e8; line-height: 1.5; }
@@ -13,9 +13,6 @@
   header h1 { font-size: 1.3rem; }
   #user-info { font-size: 0.85rem; color: #8b949e; }
   #user-info strong { color: #58a6ff; }
-
-  .api-url { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
-  .api-url input { flex: 1; padding: 8px 12px; background: #161b22; border: 1px solid #30363d; border-radius: 6px; color: #e1e4e8; font-size: 0.9rem; }
 
   .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
   .card h2 { font-size: 1rem; color: #58a6ff; margin-bottom: 12px; cursor: pointer; user-select: none; }
@@ -59,14 +56,9 @@
 <div class="container">
 
   <header>
-    <h1>TodoList API</h1>
+    <h1>TodoList</h1>
     <div id="user-info"><span id="auth-status">No autenticado</span></div>
   </header>
-
-  <div class="api-url">
-    <label>API:</label>
-    <input id="api-url" />
-  </div>
 
   <!-- LOGIN -->
   <div class="card open" id="card-login">
@@ -104,7 +96,7 @@
 
   <!-- TAREAS -->
   <div class="card" id="card-tareas">
-    <h2 onclick="toggle(this)">Tareas (no auth)</h2>
+    <h2 onclick="toggle(this)">Tareas</h2>
     <div class="card-body">
       <div class="inline-form" style="margin-bottom:8px">
         <button class="btn-secondary btn-sm" onclick="getTodasTareas()">GET /api/tareas</button>
@@ -220,16 +212,7 @@
 
 </div>
 
-<script src="config.js"></script>
 <script>
-const API = () => {
-  const input = document.getElementById('api-url').value.trim();
-  if (input) return input.replace(/\/+$/, '');
-  return (window.__API_CONFIG__?.baseUrl || window.location.origin).replace(/\/+$/, '');
-};
-window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('api-url').value = window.__API_CONFIG__?.baseUrl || window.location.origin;
-});
 let token = localStorage.getItem('jwt') || '';
 
 function toggle(el) { el.parentElement.classList.toggle('open'); }
@@ -246,7 +229,7 @@ async function req(method, path, body, resultId) {
   const opts = { method, headers: { 'Content-Type': 'application/json', ...authHeaders() } };
   if (body) opts.body = JSON.stringify(body);
   try {
-    const res = await fetch(API() + path, opts);
+    const res = await fetch(path, opts);
     const text = await res.text();
     let data = text;
     try { data = JSON.parse(text); } catch(e) {}
@@ -260,7 +243,6 @@ async function req(method, path, body, resultId) {
   }
 }
 
-// Login
 async function doLogin() {
   const email = document.getElementById('login-email').value;
   const pass = document.getElementById('login-pass').value;
@@ -294,10 +276,8 @@ async function doRegister() {
   await req('POST', '/api/usuarios/crear', { Nombre: nombre, Correo: email, Password: pass }, 'reg-result');
 }
 
-// Health
 function checkHealth() { req('GET', '/health', null, 'health-result'); }
 
-// Tareas
 function getTodasTareas() { req('GET', '/api/tareas', null, 'tareas-list-result'); }
 function getTareaById() { const id = document.getElementById('tarea-id').value; if (!id) return; req('GET', `/api/tareas/${id}`, null, 'tarea-id-result'); }
 function crearTarea() {
@@ -315,7 +295,6 @@ function cambiarNombreTarea() {
 function completarTarea() { const id = document.getElementById('tarea-completar-id').value; if (!id) return; req('POST', `/api/tareas/${id}/completar`, null, 'tarea-complete-result'); }
 function borrarTarea() { const id = document.getElementById('tarea-delete-id').value; if (!id) return; req('DELETE', `/api/tareas/${id}`, null, 'tarea-delete-result'); }
 
-// Usuarios
 function getUsuarios() { req('GET', '/api/usuarios/all', null, 'usuarios-list-result'); }
 function activarUsuario() { const id = document.getElementById('user-activar-id').value; if (!id) return; req('PATCH', `/api/usuarios/${id}/activar`, null, 'user-activar-result'); }
 function desactivarUsuario() { const id = document.getElementById('user-desactivar-id').value; if (!id) return; req('PATCH', `/api/usuarios/${id}/desactivar`, null, 'user-desactivar-result'); }
@@ -333,7 +312,6 @@ function cambiarPassUsuario() {
 }
 function borrarUsuario() { const id = document.getElementById('user-borrar-id').value; if (!id) return; req('DELETE', `/api/usuarios/${id}/borrar`, null, 'user-borrar-result'); }
 
-// Raw
 async function sendRaw() {
   const method = document.getElementById('raw-method').value;
   const path = document.getElementById('raw-path').value;
@@ -343,7 +321,6 @@ async function sendRaw() {
   await req(method, path, body, 'raw-result');
 }
 
-// Init
 if (token) {
   document.getElementById('auth-status').innerHTML = 'JWT: <strong>' + token.slice(0, 30) + '...</strong>';
   try {
