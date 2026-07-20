@@ -6,11 +6,6 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_RESOURCE_GROUP: todoList-rg
-  AZURE_WEBAPP_NAME: todolist-api
-  AZURE_STATIC_WEBAPP: todolist-frontend
-  ACR_REGISTRY: todolistregistry
-  ACR_IMAGE: todolist-api
   DOTNET_VERSION: "10.0.x"
 
 jobs:
@@ -33,60 +28,28 @@ jobs:
       - name: Test
         run: dotnet test --no-build --configuration Release --verbosity normal
 
-  deploy-backend:
+  deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    permissions:
-      id-token: write
-      contents: read
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Login to Azure Container Registry
-        uses: azure/docker-login@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          login-server: ${{ env.ACR_REGISTRY }}.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Build and push Docker image
-        run: |
-          docker build -t ${{ env.ACR_REGISTRY }}.azurecr.io/${{ env.ACR_IMAGE }}:${{ github.sha }} .
-          docker build -t ${{ env.ACR_REGISTRY }}.azurecr.io/${{ env.ACR_IMAGE }}:latest .
-          docker push ${{ env.ACR_REGISTRY }}.azurecr.io/${{ env.ACR_IMAGE }}:${{ github.sha }}
-          docker push ${{ env.ACR_REGISTRY }}.azurecr.io/${{ env.ACR_IMAGE }}:latest
+      - name: Restore
+        run: dotnet restore
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Publish
+        run: dotnet publish todoList.Presentation/todoList.Api.csproj -c Release -o ./publish --no-restore
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          images: ${{ env.ACR_REGISTRY }}.azurecr.io/${{ env.ACR_IMAGE }}:${{ github.sha }}
-
-  deploy-frontend:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Replace API URL in config
-        run: |
-          sed -i "s|http://localhost:5150|${{ secrets.API_BASE_URL }}|g" frontend/config.js
-
-      - name: Build and Deploy to Azure Static Web Apps
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEBAPP_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: "upload"
-          app_location: "frontend"
-          output_location: ""
+          package: ./publish
