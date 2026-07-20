@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using todoList.Application.DTO.Usuario;
@@ -10,7 +11,7 @@ namespace todoList.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-
+[Produces("application/json")]
 public class UsuariosController : ControllerBase
 {
     private readonly ActivarUsuarioUseCase _activarUsuario;
