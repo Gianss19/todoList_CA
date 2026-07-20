@@ -44,7 +44,7 @@ public class TareasEndpointTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
-    public async Task CrearTarea_NombreDuplicado_Retorna404()
+    public async Task CrearTarea_NombreDuplicado_Retorna409()
     {
         var (authClient, userId) = await SetupAuthenticatedUserAsync("DupUser");
 
@@ -60,19 +60,21 @@ public class TareasEndpointTests : IClassFixture<TestWebApplicationFactory>
             usuario_id = userId
         });
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
 
     [Fact]
     public async Task CrearTarea_UsuarioNoExiste_Retorna409()
     {
-        var response = await _client.PostAsJsonAsync("/api/tareas", new
+        var (authClient, _) = await SetupAuthenticatedUserAsync("NoExisteUser");
+
+        var response = await authClient.PostAsJsonAsync("/api/tareas", new
         {
             nombre = "Tarea sin usuario valido",
             usuario_id = Guid.NewGuid()
         });
 
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
 
     [Fact]
@@ -94,11 +96,11 @@ public class TareasEndpointTests : IClassFixture<TestWebApplicationFactory>
     }
 
     [Fact]
-    public async Task ObtenerTodas_SinAuth_Retorna200()
+    public async Task ObtenerTodas_SinAuth_Retorna401()
     {
         var response = await _client.GetAsync("/api/tareas");
 
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]

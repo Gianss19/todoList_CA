@@ -7,6 +7,7 @@ namespace todoList.Api.Controllers;
 
 [ApiController]
 [Route("api/login")]
+[Produces("application/json")]
 public class LoginController : ControllerBase
 {
     private readonly LoginUseCase _loginUseCase;
@@ -23,7 +24,7 @@ public class LoginController : ControllerBase
             return Unauthorized();
 
         var token = await _loginUseCase.Login(request);
-        return Ok(token);
+        return Content(token, "application/json");
     }
 
 

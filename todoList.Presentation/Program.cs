@@ -16,7 +16,10 @@ using todoList.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
@@ -51,13 +54,20 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Administrador", policy => policy.RequireRole(nameof(Rol.Administrador)));
 });
 
-
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<TodoListDbContext>(options =>
+        options.UseInMemoryDatabase("TodoListDev"));
+}
+else
+{
     var connectionString =
         builder.Configuration.GetConnectionString("DefaultConnection")
         ?? throw new InvalidOperationException("No se encontró la cadena de conexión.");
 
     builder.Services.AddDbContext<TodoListDbContext>(options =>
         options.UseNpgsql(connectionString));
+}
 
 builder.Services.AddHttpClient<IHttpCatService, HttpCatService>();
 

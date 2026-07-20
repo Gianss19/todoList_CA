@@ -10,6 +10,7 @@ namespace todoList.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Produces("application/json")]
 public class TareasController : ControllerBase
 {
     private readonly ObtenerTodasTareasUseCase _obtenerTodasUseCase;
@@ -58,8 +59,7 @@ public class TareasController : ControllerBase
         }
         catch (KeyNotFoundException)
         {
-            var catUrl = await _httpCatService.GetImageUrlAsync(400);
-            return Redirect(catUrl);
+            return NotFound();
         }
     }
 
@@ -74,8 +74,7 @@ public class TareasController : ControllerBase
         }
         catch (InvalidOperationException)
         {
-            var catUrl = await _httpCatService.GetImageUrlAsync(409);
-            return Redirect(catUrl);
+            return Conflict();
         }
     }
     [HttpPatch("{id:guid}/nombre")]
