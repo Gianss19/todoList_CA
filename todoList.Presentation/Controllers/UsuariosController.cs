@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using todoList.Application.DTO.Usuario;
@@ -71,35 +72,45 @@ public async Task<IActionResult> ActivarUsuario(Guid id)
 
     [HttpPatch("{id:guid}/cambiar-contraseña")]
     [Authorize]
-    public async Task<IActionResult> CambiarContraseña( [FromBody][Required] CambiarContraseñaRequestDto cambiar)
+    public async Task<IActionResult> CambiarContraseña(Guid id, [FromBody][Required] CambiarContraseñaRequestDto cambiar)
     {
         try
         {
-          await  _cambiarContraseña.CambiarContraseña(cambiar);
-            return Ok();
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim, out var userId) || userId != id)
+                return Forbid();
+
+            if (!User.IsInRole(nameof(Rol.Administrador)) && userId != id)
+                return Forbid();
+
+            await _cambiarContraseña.CambiarContraseña(cambiar);
+            return NoContent();
         }
         catch (Exception ex)
         {
-            
             return BadRequest(ex.Message);
-            
         }
     }
 
     [HttpPatch("{id:guid}/cambiar-nombre")]
     [Authorize]
-    public async Task<IActionResult> CambiarNombre([FromBody][Required] CambiarNombreUsuarioRequestDto cambiarNombre)
+    public async Task<IActionResult> CambiarNombre(Guid id, [FromBody][Required] CambiarNombreUsuarioRequestDto cambiarNombre)
     {
         try
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null || !Guid.TryParse(userIdClaim, out var userId) || userId != id)
+                return Forbid();
+
+            if (!User.IsInRole(nameof(Rol.Administrador)) && userId != id)
+                return Forbid();
+
             var usuario = await _cambiarNombre.CambiarNombreUsuario(cambiarNombre);
 
             return Ok(usuario);
-            
         }
         catch (Exception ex)
         {
-            
             return BadRequest(ex.Message);
         }
     }

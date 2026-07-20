@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using todoList.Application.DTO;
 using todoList.Application.DTO.Tarea;
@@ -95,8 +94,8 @@ public class TareasController : ControllerBase
     {
         try
         {
-            var response = _borrarTareasUseCase.DeleteAsync(id);
-            return Ok();
+            await _borrarTareasUseCase.DeleteAsync(id);
+            return NoContent();
         }
         catch (KeyNotFoundException)
         {

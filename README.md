@@ -1,320 +1,179 @@
 # TodoList API
 
-API REST desarrollada con **ASP.NET Core 10** siguiendo los principios de **Clean Architecture** y **SOLID**. El proyecto implementa autenticación mediante **JWT**, persistencia con **Entity Framework Core Code First** y **PostgreSQL**, así como un diseño desacoplado mediante repositorios, casos de uso e inyección de dependencias.
+REST API para gestionar tareas y usuarios, construida con .NET 10, Clean Architecture y PostgreSQL.
 
-> Proyecto desarrollado con fines de aprendizaje para profundizar en arquitectura de software y desarrollo backend con .NET.
-
----
-
-# Tecnologías
-
-- .NET 10
-- ASP.NET Core Web API
-- Entity Framework Core 10
-- PostgreSQL
-- JWT (JSON Web Token)
-- BCrypt
-- Dependency Injection
-- Clean Architecture
-- Docker
-- Swagger / OpenAPI
-
----
-
-# Arquitectura
-
-El proyecto está dividido en cuatro capas siguiendo Clean Architecture.
+## Arquitectura
 
 ```
-TodoList
-│
-├── todoList.Domain
-│   ├── Entities
-│   ├── Repositories
-│   └── Enums
-│
-├── todoList.Application
-│   ├── DTOs
-│   ├── Interfaces
-│   ├── Services
-│   └── UseCases
-│
-├── todoList.Infrastructure
-│   ├── Persistence
-│   ├── Configurations
-│   ├── Repositories
-│   └── Services
-│
-└── todoList.Presentation
-    ├── Controllers
-    ├── Program.cs
-    └── appsettings.json
+todoList.Domain          → Entidades y contratos (interfaces)
+todoList.Application     → Casos de uso y DTOs
+todoList.Infrastructure  → Persistencia (EF Core), servicios (BCrypt, JWT)
+todoList.Presentation    → Controllers, middleware, configuración
+todoList.Tests           → Pruebas unitarias (xUnit + Moq)
 ```
 
----
+## Endpoints
 
-# Principios aplicados
+### Autenticación
 
-## SOLID
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `POST` | `/api/login` | Iniciar sesión, retorna JWT | No |
 
-- Single Responsibility Principle
-- Open/Closed Principle
-- Liskov Substitution Principle
-- Interface Segregation Principle
-- Dependency Inversion Principle
+### Usuarios
 
-## Patrones utilizados
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `POST` | `/api/usuarios/crear` | Crear usuario | No |
+| `GET` | `/api/usuarios/all` | Obtener todos los usuarios | Admin |
+| `PATCH` | `/api/usuarios/{id}/activar` | Activar usuario | Admin |
+| `PATCH` | `/api/usuarios/{id}/desactivar` | Desactivar usuario | Admin |
+| `PATCH` | `/api/usuarios/{id}/cambiar-nombre` | Cambiar nombre | Owner/Admin |
+| `PATCH` | `/api/usuarios/{id}/cambiar-contraseña` | Cambiar contraseña | Owner/Admin |
+| `DELETE` | `/api/usuarios/{id}/borrar` | Eliminar usuario | Admin |
 
-- Repository Pattern
-- Dependency Injection
-- Use Case Pattern
-- DTO Pattern
+### Tareas
 
----
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/api/tareas` | Obtener todas las tareas | Sí |
+| `GET` | `/api/tareas/{id}` | Obtener tarea por ID | Sí |
+| `POST` | `/api/tareas` | Crear tarea | Sí |
+| `PATCH` | `/api/tareas/{id}/nombre` | Cambiar nombre de tarea | Sí |
+| `POST` | `/api/tareas/{id}/completar` | Marcar tarea como completada | Sí |
+| `DELETE` | `/api/tareas/{id}` | Eliminar tarea | Sí |
 
-# Funcionalidades
+### Salud
 
-## Usuarios
+| Método | Ruta | Descripción | Auth |
+|--------|------|-------------|------|
+| `GET` | `/health` | Health check | No |
 
-- Registro de usuarios
-- Inicio de sesión
-- Hash de contraseñas mediante BCrypt
-- Activación y desactivación de usuarios
-- Cambio de nombre
-- Cambio de contraseña
+## Body Requests
 
-## Tareas
-
-- Crear tareas
-- Obtener todas las tareas
-- Obtener una tarea por Id
-- Cambiar nombre
-- Completar tarea
-- Eliminar tarea
-
-## Seguridad
-
-- JWT Authentication
-- Claims
-- Roles
-- Policies
-- Endpoints protegidos mediante `[Authorize]`
-
----
-
-# Modelo de datos
-
-## Usuario
-
-| Campo | Tipo |
-|--------|------|
-| Id | Guid |
-| Nombre | string |
-| Correo | string |
-| PasswordHash | string |
-| Rol | Enum |
-| Activo | bool |
-| FechaCreacion | DateTime |
-| FechaActualizacion | DateTime? |
-
----
-
-## Tarea
-
-| Campo | Tipo |
-|--------|------|
-| Id | Guid |
-| Nombre | string |
-| IsCompleted | bool |
-| UsuarioId | Guid |
-| FechaCreacion | DateTime |
-| FechaActualizacion | DateTime? |
-
-Relación:
-
-```
-Usuario
-   │
-   │ 1
-   │
-   └───────────────*
-                  Tarea
-```
-
----
-
-# Autenticación
-
-La autenticación se realiza mediante JWT.
-
-Proceso:
-
-```
-Usuario
-
-↓
-
-Login
-
-↓
-
-Validación de contraseña (BCrypt)
-
-↓
-
-Generación del JWT
-
-↓
-
-Cliente almacena el token
-
-↓
-
-Authorization: Bearer <token>
-
-↓
-
-Endpoints protegidos
-```
-
----
-
-# Entity Framework Core
-
-El proyecto utiliza **Code First**.
-
-Características implementadas:
-
-- DbContext
-- Fluent API
-- IEntityTypeConfiguration
-- Relaciones 1:N
-- Migraciones
-- PostgreSQL
-
----
-
-# Variables de configuración
-
-El proyecto utiliza **User Secrets** para evitar exponer información sensible en GitHub.
-
-Ejemplo:
-
+### Login
 ```json
+POST /api/login
 {
-  "ConnectionStrings": {
-    "DefaultConnection": ""
-  },
-
-  "Jwt": {
-    "SecretKey": "",
-    "Issuer": "",
-    "Audience": ""
-  }
+  "email": "usuario@ejemplo.com",
+  "password": "MiPassword123!"
 }
 ```
 
----
-
-# Ejecutar el proyecto
-
-## 1 Clonar
-
-```bash
-git clone https://github.com/Gianss19/todoList_CA.git
-```
-
----
-
-## 2 Restaurar paquetes
-
-```bash
-dotnet restore
-```
-
----
-
-## 3 Configurar User Secrets
-
-```bash
-dotnet user-secrets init
-```
-
-Agregar:
-
+### Crear Usuario
 ```json
+POST /api/usuarios/crear
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=TodoList;Username=postgres;Password=tu_password"
-  },
-
-  "Jwt": {
-    "SecretKey": "tu_secret_key",
-    "Issuer": "TodoList.Api",
-    "Audience": "TodoList.Client"
-  }
+  "nombre": "Juan Pérez",
+  "correo": "juan@ejemplo.com",
+  "password": "MiPassword123!"
 }
 ```
 
----
-
-## 4 Crear la base de datos
-
-```bash
-dotnet ef database update
+### Crear Tarea
+```json
+POST /api/tareas
+{
+  "nombre": "Mi nueva tarea",
+  "usuario_id": "guid-del-usuario"
+}
 ```
 
----
+### Cambiar Nombre (Tarea)
+```json
+PATCH /api/tareas/{id}/nombre
+{
+  "id": "guid-de-la-tarea",
+  "nuevoNombre": "Nombre actualizado"
+}
+```
 
-## 5 Ejecutar
+### Cambiar Nombre (Usuario)
+```json
+PATCH /api/usuarios/{id}/cambiar-nombre
+{
+  "id": "guid-del-usuario",
+  "nuevoNombre": "Nuevo Nombre"
+}
+```
 
+### Cambiar Contraseña
+```json
+PATCH /api/usuarios/{id}/cambiar-contraseña
+{
+  "id": "guid-del-usuario",
+  "nuevaPassword": "NuevaPassword123!"
+}
+```
+
+## Respuestas
+
+### Exitosa (200/201)
+```json
+{
+  "id": "guid",
+  "nombre": "string",
+  "isCompleted": false,
+  "fechaActualizacion": "2026-01-01T00:00:00Z"
+}
+```
+
+### Error
+```json
+{
+  "error": "Mensaje descriptivo del error"
+}
+```
+
+### Códigos de estado
+- **200** - OK
+- **201** - Created
+- **204** - No Content
+- **400** - Bad Request (datos inválidos)
+- **401** - Unauthorized (no autenticado)
+- **403** - Forbidden (sin permisos)
+- **404** - Not Found
+- **409** - Conflict (duplicado)
+
+## Desarrollo
+
+### Requisitos
+- .NET 10 SDK
+- Docker (opcional, para PostgreSQL)
+
+### Ejecutar en desarrollo
 ```bash
 dotnet run --project todoList.Presentation
 ```
 
----
+La API usa **InMemory Database** automáticamente en Development. Credenciales del seed:
+- **Admin:** `admin@dev.local` / `Admin123!`
+- **Usuario:** `user@dev.local` / `User123!`
 
-# Aprendizajes
+### Ejecutar pruebas
+```bash
+dotnet test todoList.Tests/todoList.Tests.csproj
+```
 
-Durante el desarrollo del proyecto se practicaron conceptos como:
+### Desplegar con Docker
+```bash
+docker compose up -d
+```
 
-- Clean Architecture
-- SOLID
-- Entity Framework Core Code First
-- Fluent API
-- Relaciones entre entidades
-- PostgreSQL
-- JWT
-- Claims
-- Roles
-- Policies
-- BCrypt
-- Dependency Injection
-- Repository Pattern
-- Casos de uso
-- DTOs
-- User Secrets
-- Migraciones
+## Variables de entorno (Producción)
 
----
+| Variable | Descripción |
+|----------|-------------|
+| `ConnectionStrings__DefaultConnection` | Cadena de conexión PostgreSQL |
+| `Jwt__SecretKey` | Clave secreta JWT (mín. 32 chars) |
+| `Jwt__Issuer` | Emisor del token |
+| `Jwt__Audience` | Audiencia del token |
+| `Cors__AllowedOrigins__0` | Orígenes permitidos para CORS |
 
-# Próximas mejoras
+## Tecnologías
 
-- Refresh Tokens
-- Paginación
-- Filtros y búsqueda
-- Logging estructurado
-- Unit Testing
-- Integration Testing
-- Docker Compose
-- CI/CD con GitHub Actions
-- Rate Limiting
-- Validación con FluentValidation
-- Result Pattern
-- CQRS + MediatR
-
----
-
-# Licencia
-
-Proyecto desarrollado únicamente con fines educativos y de práctica.
+- .NET 10
+- Entity Framework Core 10 (PostgreSQL / InMemory)
+- BCrypt.Net (hashing de contraseñas)
+- JWT Bearer Authentication
+- xUnit + Moq + FluentAssertions (testing)

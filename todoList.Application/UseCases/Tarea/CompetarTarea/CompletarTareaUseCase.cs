@@ -19,6 +19,6 @@ public CompletarTareaUseCase(ITareasRepository repository)
         tarea.Completar();
         
         await _repository.UpdateAsync(tarea);
-        return new GeneralTareaResponseDto(tarea.Id, tarea.Nombre, tarea.IsCompleted, DateTime.Now);
+        return new GeneralTareaResponseDto(tarea.Id, tarea.Nombre, tarea.IsCompleted, tarea.FechaActualizacion);
     }
 }

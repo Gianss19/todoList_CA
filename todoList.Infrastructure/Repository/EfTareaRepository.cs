@@ -24,12 +24,12 @@ public class EfTareaRepository : ITareasRepository
 
     public async Task DeleteAsync(Guid id)
     {
-        var usuario = await _context.Tareas.FirstOrDefaultAsync(t => t.Id == id);
-        
-        if(usuario == null)
-            throw new InvalidOperationException("El usuario no existe");
-            
-             _context.Tareas.Remove(usuario);
+        var tarea = await _context.Tareas.FirstOrDefaultAsync(t => t.Id == id);
+
+        if(tarea == null)
+            throw new KeyNotFoundException("La tarea no existe.");
+
+        _context.Tareas.Remove(tarea);
        await _context.SaveChangesAsync();        
     }
 

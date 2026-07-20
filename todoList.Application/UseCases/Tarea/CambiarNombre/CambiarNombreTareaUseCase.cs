@@ -24,6 +24,6 @@ public class CambiarNombreTareaUseCase
 
         await _repository.UpdateAsync(tarea);
 
-        return new CambiarNombreTareaResponseDto(tarea.Id, tarea.Nombre, DateTime.Now);    
+        return new CambiarNombreTareaResponseDto(tarea.Id, tarea.Nombre, tarea.FechaActualizacion);    
     }
 }
