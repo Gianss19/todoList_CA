@@ -54,19 +54,17 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Administrador", policy => policy.RequireRole(nameof(Rol.Administrador)));
 });
 
-if (builder.Environment.IsDevelopment())
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (!string.IsNullOrWhiteSpace(connectionString))
 {
     builder.Services.AddDbContext<TodoListDbContext>(options =>
-        options.UseInMemoryDatabase("TodoListDev"));
+        options.UseNpgsql(connectionString));
 }
 else
 {
-    var connectionString =
-        builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? throw new InvalidOperationException("No se encontró la cadena de conexión.");
-
     builder.Services.AddDbContext<TodoListDbContext>(options =>
-        options.UseNpgsql(connectionString));
+        options.UseInMemoryDatabase("TodoList"));
 }
 
 builder.Services.AddHttpClient<IHttpCatService, HttpCatService>();
@@ -117,10 +115,13 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<TodoListDbContext>();
-    context.Database.EnsureCreated();
-    DevSeedData.Seed(context);
+    if (!string.IsNullOrWhiteSpace(connectionString))
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<TodoListDbContext>();
+        context.Database.EnsureCreated();
+        DevSeedData.Seed(context);
+    }
 }
 
 app.UseMiddleware<SecurityHeadersMiddleware>();
